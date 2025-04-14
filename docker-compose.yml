@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  api:
+    build: ./api
+    container_name: inventory-api
+    restart: always
+    ports:
+      - "${API_PORT}:3000"
+    volumes:
+      - ./api/src:/app/src
+      - ./api/package.json:/app/package.json
+      - ./api/package-lock.json:/app/package-lock.json
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - DB_HOST=mysql
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - mysql
+    networks:
+      - inventory-network
+
+  prediction-service:
+    build: ./prediction-service
+    container_name: inventory-prediction
+    restart: always
+    ports:
+      - "${PREDICTION_PORT}:5000"
+    volumes:
+      - ./prediction-service/src:/app/src
+      - ./prediction-service/requirements.txt:/app/requirements.txt
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - API_KEY=${PREDICTION_API_KEY}
+    depends_on:
+      - mysql
+      - api
+    networks:
+      - inventory-network
+
+  frontend:
+    build: ./frontend
+    container_name: inventory-frontend
+    restart: always
+    ports:
+      - "${FRONTEND_PORT}:80"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/package.json:/app/package.json
+      - ./frontend/package-lock.json:/app/package-lock.json
+    depends_on:
+      - api
+    networks:
+      - inventory-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: inventory-mysql
+    restart: always
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    networks:
+      - inventory-network
+
+networks:
+  inventory-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
