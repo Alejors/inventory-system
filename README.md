@@ -19,7 +19,7 @@ Este proyecto es un sistema completo de gestión de inventario que combina una A
 
 1. Clona este repositorio:
    ```
-   git clone https://github.com/tu-usuario/inventory-system.git
+   git clone https://github.com/Alejors/inventory-system.git
    cd inventory-system
    ```
 
