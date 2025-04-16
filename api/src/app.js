@@ -6,9 +6,12 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const { requestLogger } = require('./utils/logger');
 const { errorHandler } = require('./middleware/errorHandler');
+const createAuthRouter = require('./routes/auth');
+const UserRepository = require('./repositories/UserRepository');
+const AuthService = require('./services/authService');
+const AuthController = require('./controllers/authController');
 
 // Import routes
-const authRoutes = require('./routes/auth');
 // const productRoutes = require('./routes/products');
 // const categoryRoutes = require('./routes/categories');
 // const locationRoutes = require('./routes/locations');
@@ -27,8 +30,13 @@ app.use(express.json(config.express.json));
 app.use(express.urlencoded(config.express.urlencoded));
 app.use(requestLogger);
 
+// Crear instancias con las dependencias inyectadas
+const userRepository = new UserRepository();
+const authService = new AuthService(userRepository);
+const authController = new AuthController(authService);
+
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', createAuthRouter(authController));
 // app.use('/api/products', productRoutes);
 // app.use('/api/categories', categoryRoutes);
 // app.use('/api/locations', locationRoutes);

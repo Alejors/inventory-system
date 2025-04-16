@@ -25,13 +25,8 @@ class UserRepository extends IUserRepository {
         return new User(userModel.toJSON());
     }
 
-    async update(id, user) {
-        const [updated] = await UserModel.update({
-            username: user.username,
-            email: user.email,
-            password: user.password,
-            role: user.role
-        }, {
+    async update(id, userData) {
+        const [updated] = await UserModel.update(userData, {
             where: { id }
         });
         if (updated) {

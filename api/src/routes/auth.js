@@ -1,9 +1,15 @@
 const express = require('express');
-const { createUserController, loginUserController } = require('../controllers/authController');
+const { authMiddleware } = require('../middleware/auth');
 
-const router = express.Router()
+function createAuthRouter(authController) {
+    const router = express.Router();
 
-router.post('/register', createUserController)
-router.post('/login', loginUserController)
+    router.post('/register', authController.createUser.bind(authController));
+    router.post('/login', authController.loginUser.bind(authController));
+    router.post('/logout', authController.logoutUser.bind(authController));
+    router.post('/change-password', authMiddleware, authController.changePassword.bind(authController));
 
-module.exports = router
+    return router;
+}
+
+module.exports = createAuthRouter;
