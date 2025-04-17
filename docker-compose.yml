@@ -83,6 +83,19 @@ services:
     networks:
       - inventory-network
 
+  email-service:
+    build: ./email-service
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./email-service/src:/app/src
+      - ./email-service/package.json:/app/package.json
+      - ./email-service/package-lock.json:/app/package-lock.json
+    env_file:
+      - .env
+    networks:
+      - inventory-network
+
 networks:
   inventory-network:
     driver: bridge
