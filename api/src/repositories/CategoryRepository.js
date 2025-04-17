@@ -31,7 +31,14 @@ class CategoryRepository extends ICategoryRepository {
         if (!existingCategory) {
             throw new Error('Categoría no encontrada');
         }
-        return await existingCategory.update(category);
+        try {
+            return await existingCategory.update(category);
+        } catch (error) {
+            if (error.name === 'SequelizeUniqueConstraintError') {
+                throw new ConstraintError('La categoría con este nombre ya existe');
+            }
+            throw error;
+        }
     }
 
     async delete(id) {
