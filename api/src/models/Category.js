@@ -25,7 +25,7 @@ const Category = sequelize.define('Category', {
       field: 'updated_at'
     },
     deletedAt: {
-        type: DAtaTypes.DATE,
+        type: DataTypes.DATE,
         field: 'deleted_at',
         allowNull: true
     }
