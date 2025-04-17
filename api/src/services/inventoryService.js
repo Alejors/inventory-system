@@ -6,10 +6,6 @@ class InventoryService {
     }
 
     async createCategory(categoryData) {
-        const existingCategory = await this.categoryRepository.findByFilter({ name: categoryData.name });
-        if (existingCategory.length > 0) {
-            throw new ConstraintError('La categoría con este nombre ya existe');
-        }
         return await this.categoryRepository.create(categoryData);
     }
 
