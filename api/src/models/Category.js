@@ -27,6 +27,7 @@ const Category = sequelize.define('Category', {
 }, {
     tableName: 'categories',
     timestamps: true,
+    paranoid: true,
 });
 
 module.exports = Category;
