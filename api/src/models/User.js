@@ -32,6 +32,11 @@ const UserModel = sequelize.define('User', {
   updatedAt: {
     type: DataTypes.DATE,
     field: 'updated_at'
+  },
+  deletedAt: {
+      type: DAtaTypes.DATE,
+      field: 'deleted_at',
+      allowNull: true
   }
 }, {
   tableName: 'users',
