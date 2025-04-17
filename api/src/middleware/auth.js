@@ -1,5 +1,7 @@
 const { verifyToken, generateTokens } = require('../services/tokenService');
 const { AuthError } = require('../errors/authError');
+const config = require('../config');
+const { JsonWebTokenError } = require('jsonwebtoken');
 
 function authMiddleware(req, res, next) {
     try {
@@ -34,7 +36,10 @@ function authMiddleware(req, res, next) {
                 req.user = decoded;
                 return next();
             } catch (refreshError) {
-                // Si el refresh token también está inválido
+                if (!(refreshError instanceof JsonWebTokenError)) {
+                    console.error("Error en el refresh token:", refreshError.message);
+                    throw new Error(refreshError.message);
+                }
                 throw new AuthError('Sesión expirada. Por favor, inicie sesión nuevamente');
             }
         }

@@ -10,7 +10,7 @@ function generateTokens(user) {
     );
 
     const refreshToken = jwt.sign(
-        { id: user.id },
+        { id: user.id, role: user.role },
         config.jwt.secret,
         { expiresIn: config.jwt.refresh.expiresIn }
     );
