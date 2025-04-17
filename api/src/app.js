@@ -6,17 +6,22 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const { requestLogger } = require('./utils/logger');
 const { errorHandler } = require('./middleware/errorHandler');
-const createAuthRouter = require('./routes/auth');
-const UserRepository = require('./repositories/UserRepository');
-const AuthService = require('./services/authService');
-const AuthController = require('./controllers/authController');
 
 // Import routes
-// const productRoutes = require('./routes/products');
-// const categoryRoutes = require('./routes/categories');
-// const locationRoutes = require('./routes/locations');
-// const movementRoutes = require('./routes/movements');
-// const dashboardRoutes = require('./routes/dashboard');
+const createAuthRouter = require('./routes/auth');
+const createCategoryRouter = require('./routes/categories');
+
+// Import Repositories
+const UserRepository = require('./repositories/UserRepository');
+const CategoryRepository = require('./repositories/CategoryRepository');
+
+// Import Services
+const AuthService = require('./services/authService');
+const InventoryService = require('./services/inventoryService');
+
+// Import Controllers
+const AuthController = require('./controllers/authController');
+const CategoryController = require('./controllers/categoryController');
 
 // Initialize express app
 const app = express();
@@ -30,15 +35,22 @@ app.use(express.json(config.express.json));
 app.use(express.urlencoded(config.express.urlencoded));
 app.use(requestLogger);
 
-// Crear instancias con las dependencias inyectadas
+// Instanciar repositorios
 const userRepository = new UserRepository();
+const categoryRepository = new CategoryRepository();
+
+// Instanciar servicios
 const authService = new AuthService(userRepository);
+const inventoryService = new InventoryService(categoryRepository);
+
+// Instanciar controladores
 const authController = new AuthController(authService);
+const categoryController = new CategoryController(inventoryService);
 
 // Routes
 app.use('/api/auth', createAuthRouter(authController));
+app.use('/api/categories', createCategoryRouter(categoryController));
 // app.use('/api/products', productRoutes);
-// app.use('/api/categories', categoryRoutes);
 // app.use('/api/locations', locationRoutes);
 // app.use('/api/movements', movementRoutes);
 // app.use('/api/dashboard', dashboardRoutes);
