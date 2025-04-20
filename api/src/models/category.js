@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const Category = sequelize.define('Category', {
+const CategoryModel = sequelize.define('Category', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -17,12 +17,14 @@ const Category = sequelize.define('Category', {
         allowNull: true,
     },
     createdAt: {
-      type: DataTypes.DATE,
-      field: 'created_at'
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        field: 'created_at'
     },
     updatedAt: {
-      type: DataTypes.DATE,
-      field: 'updated_at'
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        field: 'updated_at'
     },
     deletedAt: {
         type: DataTypes.DATE,
@@ -35,4 +37,8 @@ const Category = sequelize.define('Category', {
     paranoid: true,
 });
 
-module.exports = Category;
+CategoryModel.beforeUpdate((category, options) => {
+    category.updatedAt = new Date();
+});
+
+module.exports = CategoryModel;

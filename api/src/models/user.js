@@ -27,21 +27,27 @@ const UserModel = sequelize.define('User', {
   },
   createdAt: {
     type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
     field: 'created_at'
   },
   updatedAt: {
     type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
     field: 'updated_at'
   },
   deletedAt: {
-      type: DataTypes.DATE,
-      field: 'deleted_at',
-      allowNull: true
+    type: DataTypes.DATE,
+    field: 'deleted_at',
+    allowNull: true
   }
 }, {
   tableName: 'users',
   timestamps: true,
   paranoid: true,
+});
+
+UserModel.beforeUpdate((user, options) => {
+  user.updatedAt = new Date();
 });
 
 module.exports = UserModel;

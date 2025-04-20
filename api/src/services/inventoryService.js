@@ -1,32 +1,17 @@
 const ConstraintError = require('../errors/constraintError');
 
 class InventoryService {
-    constructor(categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    constructor() {}
+    async addProduct(productId, quantity) {
+        // Lógica para agregar un producto al inventario
+    }
+    
+    async moveProduct(productId, fromLocationId, toLocationId, quantity) {
+        // Lógica para mover un producto entre ubicaciones
     }
 
-    async createCategory(categoryData) {
-        return await this.categoryRepository.create(categoryData);
-    }
-
-    async getCategoryById(id) {
-        return await this.categoryRepository.findById(id);
-    }
-
-    async getCategoriesByFilter(filter) {
-        return await this.categoryRepository.findByFilter(filter);
-    }
-
-    async getAllCategories() {
-        return await this.categoryRepository.findAll();
-    }
-
-    async updateCategory(id, categoryData) {
-        return await this.categoryRepository.update(id, categoryData);
-    }
-
-    async deleteCategory(id) {
-        return await this.categoryRepository.delete(id);
+    async getInventory() {
+        // Lógica para obtener el inventario actual
     }
 }
 

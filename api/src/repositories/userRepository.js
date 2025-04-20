@@ -1,6 +1,6 @@
 const IUserRepository = require('../interfaces/IUserRepository.js');
-const User = require('../entities/User.js');
-const UserModel = require('../models/User.js');
+const User = require('../entities/user.js');
+const UserModel = require('../models/user.js');
 
 class UserRepository extends IUserRepository {
     async findById(id) {
