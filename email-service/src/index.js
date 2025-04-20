@@ -1,8 +1,8 @@
 // email-service/index.js
 const express = require('express');
 const dotenv = require('dotenv');
-const SendGridService = require('./sendGridService');
-const EmailController = require('./emailController');
+const SendGridService = require('./services/sendGridService');
+const EmailController = require('./controllers/emailController');
 
 dotenv.config();
 
