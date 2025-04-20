@@ -71,7 +71,12 @@ module.exports = {
         allowNull: false
       },
       address: {
-        type: Sequelize.TEXT
+        type: Sequelize.STRING(255),
+        allowNull: false
+      },
+      references: {
+        type: Sequelize.TEXT,
+        allowNull: true
       },
       type: {
         type: Sequelize.ENUM('warehouse', 'store', 'supplier'),
