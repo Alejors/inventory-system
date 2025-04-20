@@ -118,24 +118,6 @@ module.exports = {
           key: 'id'
         }
       },
-      unit_price: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false
-      },
-      reorder_point: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 10
-      },
-      reorder_quantity: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 20
-      },
-      lead_time_days: {
-        type: Sequelize.INTEGER,
-        defaultValue: 5
-      },
       created_at: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
@@ -152,14 +134,6 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      product_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'products',
-          key: 'id'
-        }
-      },
       location_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -168,18 +142,48 @@ module.exports = {
           key: 'id'
         }
       },
+      product_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'products',
+          key: 'id'
+        }
+      },
       quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0
       },
+      unitPrice: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: false
+      },
+      reorderPoint: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      reorderQuantity: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      leadTimeDays: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       created_at: {
         type: Sequelize.DATE,
+        allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updated_at: {
         type: Sequelize.DATE,
+        allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+      },
+      deleted_at: {
+        type: Sequelize.DATE,
+        allowNull: true
       }
     });
 

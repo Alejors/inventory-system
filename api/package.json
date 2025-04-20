@@ -11,6 +11,8 @@
       "migration:run": "npx sequelize-cli db:migrate",
       "migration:undo": "npx sequelize-cli db:migrate:undo --name",
       "migration:undo:all": "npx sequelize-cli db:migrate:undo:all",
+      "seeders:run": "npx sequelize-cli db:seed:all",
+      "seeders:undo": "npx sequelize-cli db:seed:undo:all",
       "test": "jest"
     },
     "dependencies": {
