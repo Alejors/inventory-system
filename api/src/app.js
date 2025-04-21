@@ -11,22 +11,26 @@ const { errorHandler } = require('./middleware/errorHandler');
 const createAuthRouter = require('./routes/auth');
 const createCategoryRouter = require('./routes/categories');
 const createLocationRouter = require('./routes/locations');
+const createProductRouter = require('./routes/products');
 
 // Import Repositories
 const UserRepository = require('./repositories/userRepository');
 const CategoryRepository = require('./repositories/categoryRepository');
 const LocationRepository = require('./repositories/locationRepository');
+const ProductRepository = require('./repositories/productRepository');
 
 // Import Services
 const AuthService = require('./services/authService');
 const InventoryService = require('./services/inventoryService');
 const LocationService = require('./services/locationService');
 const CategoryService = require('./services/categoryService');
+const ProductService = require('./services/productService');
 
 // Import Controllers
 const AuthController = require('./controllers/authController');
 const CategoryController = require('./controllers/categoryController');
 const LocationController = require('./controllers/locationController');
+const ProductController = require('./controllers/productController');
 
 // Initialize express app
 const app = express();
@@ -44,22 +48,26 @@ app.use(requestLogger);
 const userRepository = new UserRepository();
 const categoryRepository = new CategoryRepository();
 const locationRepository = new LocationRepository();
+const productRepository = new ProductRepository();
+
 // Instanciar servicios
 const authService = new AuthService(userRepository);
 const inventoryService = new InventoryService();
 const categoryService = new CategoryService(categoryRepository);
-const locationService = new LocationService(locationRepository);
+const locationService = new LocationService(locationRepository, userRepository);
+const productService = new ProductService(productRepository);
 
 // Instanciar controladores
 const authController = new AuthController(authService);
 const categoryController = new CategoryController(categoryService);
 const locationController = new LocationController(locationService);
+const productController = new ProductController(productService);
 
 // Routes
 app.use('/api/auth', createAuthRouter(authController));
 app.use('/api/categories', createCategoryRouter(categoryController));
 app.use('/api/locations', createLocationRouter(locationController));
-// app.use('/api/products', productRoutes);
+app.use('/api/products', createProductRouter(productController));
 // app.use('/api/movements', movementRoutes);
 // app.use('/api/dashboard', dashboardRoutes);
 
