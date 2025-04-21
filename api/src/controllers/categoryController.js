@@ -1,14 +1,14 @@
 const ConstraintError = require('../errors/constraintError');
-
+const CategoryDTO = require('../dtos/categoryDTO');
 class CategoryController {
     constructor(categoryService) {
         this.categoryService = categoryService;
     }
 
     async createCategory(req, res) {
-        const { name, description } = req.body;
+        const categoryDTO = CategoryDTO.fromObject(req.body);
         try {
-            const category = await this.categoryService.createCategory({ name, description });
+            const category = await this.categoryService.createCategory(categoryDTO);
             res.status(201).json({ success: true, category });
         } catch (error) {
             if (error instanceof ConstraintError) {
