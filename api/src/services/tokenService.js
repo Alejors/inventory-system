@@ -32,7 +32,16 @@ function verifyToken(token) {
     }
 }
 
+function generateCompanyToken(company) {
+    return jwt.sign(
+        { id: company.id },
+        config.jwt.secret,
+        { expiresIn: '1d' }
+    );
+}
+
 module.exports = {
     generateTokens,
-    verifyToken
+    verifyToken,
+    generateCompanyToken,
 }; 

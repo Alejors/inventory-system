@@ -19,17 +19,14 @@ const CompanyModel = sequelize.define('Company', {
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
-    field: 'created_at',
   },
   updatedAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
-    field: 'updated_at',
   },
   deletedAt: {
     type: DataTypes.DATE,
     allowNull: true,
-    field: 'deleted_at',
   },
 }, {
   tableName: 'companies',
