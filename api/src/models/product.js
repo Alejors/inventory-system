@@ -1,8 +1,7 @@
-// Modelo Product usando Sequelize
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/database');
+const sequelize = require('../config/database');
 
-const Product = sequelize.define('Product', {
+const ProductModel = sequelize.define('Product', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -39,4 +38,4 @@ const Product = sequelize.define('Product', {
   timestamps: true
 });
 
-module.exports = Product;
+module.exports = { ProductModel };
