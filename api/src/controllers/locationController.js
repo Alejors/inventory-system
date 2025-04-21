@@ -8,7 +8,8 @@ class LocationController {
     async create(req, res) {
         try {
             const locationData = req.body;
-            const location = await this.locationService.create(locationData);
+            const user = req.user;
+            const location = await this.locationService.create(locationData, user);
             return res.status(201).json(location);
         } catch (error) {
             if (error instanceof ConstraintError) {
@@ -21,7 +22,8 @@ class LocationController {
     async findById(req, res) {
         try {
             const { id } = req.params;
-            const location = await this.locationService.findById(id);
+            const user = req.user;
+            const location = await this.locationService.findById(id, user);
             if (!location) {
                 return res.status(404).json({ message: 'Ubicación no encontrada' });
             }
@@ -33,7 +35,8 @@ class LocationController {
 
     async findAll(req, res) {
         try {
-            const locations = await this.locationService.findAll();
+            const user = req.user;
+            const locations = await this.locationService.findAll(user);
             return res.status(200).json(locations);
         } catch (error) {
             return res.status(500).json({ message: 'Error interno del servidor' });
@@ -44,7 +47,8 @@ class LocationController {
         try {
             const { id } = req.params;
             const locationData = req.body;
-            const updatedLocation = await this.locationService.update(id, locationData);
+            const user = req.user;
+            const updatedLocation = await this.locationService.update(id, locationData, user);
             if (!updatedLocation) {
                 return res.status(404).json({ message: 'Ubicación no encontrada' });
             }
@@ -60,7 +64,8 @@ class LocationController {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            await this.locationService.delete(id);
+            const user = req.user;
+            await this.locationService.delete(id, user);
             return res.status(204).send();
         } catch (error) {
             return res.status(500).json({ message: 'Error interno del servidor' });

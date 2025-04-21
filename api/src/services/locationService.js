@@ -1,26 +1,47 @@
 class LocationService {
-    constructor(locationRepository) {
+    constructor(locationRepository, userRepository) {
         this.locationRepository = locationRepository;
+        this.userRepository = userRepository;
     }
 
-    async create(locationData) {
-        return await this.locationRepository.create(locationData);
+    async create(locationData, user) {
+        const currentUser = await this.userRepository.findById(user.id);
+        if (!currentUser) {
+            throw new Error('Usuario no encontrado');
+        }
+        return await this.locationRepository.create(locationData, currentUser);
     }
 
-    async findById(id) {
-        return await this.locationRepository.findById(id);
+    async findById(id, user) {
+        const currentUser = await this.userRepository.findById(user.id);
+        if (!currentUser) {
+            throw new Error('Usuario no encontrado');
+        }
+        return await this.locationRepository.findById(id, currentUser);
     }
 
-    async findAll() {
-        return await this.locationRepository.findAll();
+    async findAll(user) {
+        const currentUser = await this.userRepository.findById(user.id);
+        if (!currentUser) {
+            throw new Error('Usuario no encontrado');
+        }
+        return await this.locationRepository.findAll(currentUser);
     }
 
-    async update(id, locationData) {
-        return await this.locationRepository.update(id, locationData);
+    async update(id, locationData, user) {
+        const currentUser = await this.userRepository.findById(user.id);
+        if (!currentUser) {
+            throw new Error('Usuario no encontrado');
+        }
+        return await this.locationRepository.update(id, locationData, currentUser);
     }
 
-    async delete(id) {
-        return await this.locationRepository.delete(id);
+    async delete(id, user) {
+        const currentUser = await this.userRepository.findById(user.id);
+        if (!currentUser) {
+            throw new Error('Usuario no encontrado');
+        }
+        return await this.locationRepository.delete(id, currentUser);
     }
 }
 
