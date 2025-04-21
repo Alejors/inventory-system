@@ -1,5 +1,8 @@
 const { AuthError } = require("../errors/authError")
-const config = require("../config")
+const config = require("../config");
+const UserDTO = require("../dtos/userDTO");
+const ConstraintError = require("../errors/constraintError");
+const { ValidationError } = require('sequelize');
 
 class AuthController {
     constructor(authService) {
@@ -9,7 +12,14 @@ class AuthController {
     async createUser(req, res) {
         try {
             const data = req.body
-            const response = await this.authService.createUser(data)
+            const userDTO = UserDTO.fromObject(data)
+            if (userDTO.role === 'admin' && (!req.user || req.user.role !== 'admin')) {
+                return res.status(403).json({
+                    success: false,
+                    message: "No tienes permisos para crear un usuario administrador"
+                })
+            }
+            const response = await this.authService.createUser(userDTO)
 
             return res.status(201).json({
                 success: true,
@@ -17,6 +27,17 @@ class AuthController {
                 message: "Usuario Creado."
             })
         } catch (error) {
+            if (error instanceof ConstraintError) {
+                return res.status(409).json({
+                    success: false,
+                    message: error.message
+                })
+            } else if (error instanceof ValidationError) {
+                return res.status(422).json({
+                    success: false,
+                    message: error.message
+                })
+            }
             console.error(error)
             res.status(500).json({ success: false, error })
         }

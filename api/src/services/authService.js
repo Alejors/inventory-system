@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs")
 const { AuthError } = require("../errors/authError")
-const { verifyToken, generateTokens } = require("./tokenService")
+const { generateTokens } = require("./tokenService");
+const ConstraintError = require("../errors/constraintError");
+const { ValidationError } = require('sequelize');
 
 const SALT = 10;
 
@@ -9,19 +11,23 @@ class AuthService {
         this.userRepository = userRepository;
     }
 
-    async createUser(payload) {
+    async createUser(userDTO) {
+        const { username, email, password, role, companyId } = userDTO
+
+        const emailExists = await this.userRepository.findByFilter({ email: email })
+        if (emailExists) {
+            throw new ConstraintError('El correo ya está registrado.')
+        }
+
+        const usernameExists = await this.userRepository.findByFilter({ username: username })
+        if (usernameExists) {
+            throw new ConstraintError('El nombre de usuario ya está registrado.')
+        }
+
+        if (role !== 'admin' && !companyId) {
+            throw new ValidationError('La empresa es requerida para este tipo de usuario.')
+        }
         try {
-            const { username, email, password, role } = payload
-
-            const emailExists = await this.userRepository.findByFilter({ email: email })
-            if (emailExists) {
-                throw new Error('El correo ya está registrado.')
-            }
-
-            const usernameExists = await this.userRepository.findByFilter({ username: username })
-            if (usernameExists) {
-                throw new Error('El nombre de usuario ya está registrado.')
-            }
             
             const hashedPassword = await bcrypt.hash(password, SALT)
 
@@ -29,7 +35,8 @@ class AuthService {
                 username,
                 email,
                 password: hashedPassword,
-                role: role || "user"
+                role: role || "user",
+                companyId
             })
 
             return savedUser
