@@ -1,14 +1,14 @@
 const ConstraintError = require('../errors/constraintError');
-
+const ProductDTO = require('../dtos/productDTO');
 class ProductController {
     constructor(productService) {
         this.productService = productService;
     }
 
     async createProduct(req, res) {
+        const productDTO = ProductDTO.fromObject(req.body);
         try {
-            const productData = req.body;
-            const product = await this.productService.createProduct(productData);
+            const product = await this.productService.createProduct(productDTO);
             res.status(201).json({ success: true, product });
         } catch (error) {
             if (error instanceof ConstraintError) {
