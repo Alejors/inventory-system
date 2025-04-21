@@ -1,15 +1,15 @@
 const ConstraintError = require('../errors/constraintError');
-
+const LocationDTO = require('../dtos/locationDTO');
 class LocationController {
     constructor(locationService) {
         this.locationService = locationService;
     }
 
     async create(req, res) {
+        const locationDTO = LocationDTO.fromObject(req.body);
         try {
-            const locationData = req.body;
             const user = req.user;
-            const location = await this.locationService.create(locationData, user);
+            const location = await this.locationService.create(locationDTO, user);
             return res.status(201).json(location);
         } catch (error) {
             if (error instanceof ConstraintError) {
