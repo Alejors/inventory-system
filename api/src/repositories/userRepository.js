@@ -1,7 +1,7 @@
 const IUserRepository = require('../interfaces/IUserRepository.js');
 const User = require('../entities/user.js');
 const UserModel = require('../models/user.js');
-
+const { sequelizeProcessFilters } = require('../utils/helpers');    
 class UserRepository extends IUserRepository {
     async findById(id) {
         const userModel = await UserModel.findByPk(id);
@@ -10,7 +10,8 @@ class UserRepository extends IUserRepository {
     }
 
     async findByFilter(filter) {
-        const userModel = await UserModel.findOne({ where: filter });
+        const processedFilter = sequelizeProcessFilters(filter);
+        const userModel = await UserModel.findOne({ where: processedFilter });
         if (!userModel) return null;
         return new User(userModel.toJSON());
     }

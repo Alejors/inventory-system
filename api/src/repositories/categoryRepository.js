@@ -2,6 +2,7 @@ const CategoryModel = require('../models/category');
 const ICategoryRepository = require('../interfaces/ICategoryRepository');
 const ConstraintError = require('../errors/constraintError');
 const CategoryEntity = require('../entities/category');
+const { sequelizeProcessFilters } = require('../utils/helpers');
 
 class CategoryRepository extends ICategoryRepository {
     async create(categoryData) {
@@ -22,7 +23,8 @@ class CategoryRepository extends ICategoryRepository {
     }
 
     async findByFilter(filter, includeDeleted = false) {
-        const categories = await CategoryModel.findAll({ where: filter, paranoid: !includeDeleted });
+        const processedFilter = sequelizeProcessFilters(filter);
+        const categories = await CategoryModel.findAll({ where: processedFilter, paranoid: !includeDeleted });
         return categories.map(cat => new CategoryEntity(cat.toJSON()));
     }
 
