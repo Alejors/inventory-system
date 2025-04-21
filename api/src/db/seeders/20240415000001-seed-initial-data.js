@@ -1,8 +1,29 @@
 'use strict'
 const bcrypt = require('bcryptjs')
 
+const DATE1 = new Date('2025-04-21T12:30:00'); // 21 de Abril de 2025 a las 12:30:00
+const DATE2 = new Date('2025-03-15T13:45:00'); // 15 de Marzo de 2025 a las 13:45:00
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    // Insertar compañías
+    await queryInterface.bulkInsert('companies', [
+      {
+        id: 1,
+        name: 'Compañía 1',
+        code: 'COMP1',
+        createdAt: DATE1,
+        updatedAt: DATE1,
+      },
+      {
+        id: 2,
+        name: 'Compañía 2',
+        code: 'COMP2',
+        createdAt: DATE1,
+        updatedAt: DATE1,
+      }
+    ])
+
     // Insertar usuarios
     const hashedPasswords = await Promise.all([
       bcrypt.hash('admin123', 10),
@@ -17,8 +38,8 @@ module.exports = {
         email: 'admin@inventory.com',
         password: hashedPasswords[0],
         role: 'admin',
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 2,
@@ -26,8 +47,9 @@ module.exports = {
         email: 'manager@inventory.com',
         password: hashedPasswords[1],
         role: 'manager',
-        created_at: new Date(),
-        updated_at: new Date()
+        companyId: 1,
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 3,
@@ -35,8 +57,9 @@ module.exports = {
         email: 'user@inventory.com',
         password: hashedPasswords[2],
         role: 'user',
-        created_at: new Date(),
-        updated_at: new Date()
+        companyId: 1,
+        created_at: DATE1,
+        updated_at: DATE1
       }
     ])
 
@@ -46,29 +69,29 @@ module.exports = {
         id: 1,
         name: 'Electrónicos',
         description: 'Productos electrónicos y gadgets',
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 2,
         name: 'Ropa',
         description: 'Prendas de vestir y accesorios',
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 3,
         name: 'Alimentos',
         description: 'Productos alimenticios',
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 4,
         name: 'Hogar',
         description: 'Artículos para el hogar',
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       }
     ])
 
@@ -79,32 +102,36 @@ module.exports = {
         name: 'Almacén Central',
         address: '123 Calle Principal, Ciudad',
         type: 'warehouse',
-        created_at: new Date(),
-        updated_at: new Date()
+        companyId: 1,
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 2,
         name: 'Tienda Norte',
         address: '456 Avenida Norte, Ciudad',
         type: 'store',
-        created_at: new Date(),
-        updated_at: new Date()
+        companyId: 1,
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 3,
         name: 'Tienda Sur',
         address: '789 Avenida Sur, Ciudad',
         type: 'store',
-        created_at: new Date(),
-        updated_at: new Date()
+        companyId: 2,
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 4,
         name: 'Proveedor Principal',
         address: '101 Calle Industrial, Ciudad',
         type: 'supplier',
-        created_at: new Date(),
-        updated_at: new Date()
+        companyId: 2,
+        created_at: DATE1,
+        updated_at: DATE1
       }
     ])
 
@@ -116,8 +143,8 @@ module.exports = {
         name: 'Smartphone X',
         description: 'Smartphone de última generación',
         category_id: 1,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 2,
@@ -125,8 +152,8 @@ module.exports = {
         name: 'Laptop Pro',
         description: 'Laptop para profesionales',
         category_id: 1,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 3,
@@ -134,8 +161,8 @@ module.exports = {
         name: 'Camiseta Básica',
         description: 'Camiseta de algodón',
         category_id: 2,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 4,
@@ -143,8 +170,8 @@ module.exports = {
         name: 'Jeans Clásicos',
         description: 'Jeans de mezclilla',
         category_id: 2,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 5,
@@ -152,8 +179,8 @@ module.exports = {
         name: 'Café Premium',
         description: 'Café de especialidad',
         category_id: 3,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 6,
@@ -161,8 +188,8 @@ module.exports = {
         name: 'Set de Toallas',
         description: 'Juego de 4 toallas',
         category_id: 4,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       }
     ])
 
@@ -177,8 +204,8 @@ module.exports = {
         reorderPoint: 5,
         reorderQuantity: 10,
         leadTimeDays: 5,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 2,
@@ -189,8 +216,8 @@ module.exports = {
         reorderPoint: 10,
         reorderQuantity: 10,
         leadTimeDays: 6,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 3,
@@ -201,8 +228,8 @@ module.exports = {
         reorderPoint: 5,
         reorderQuantity: 5,
         leadTimeDays: 4,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 4,
@@ -213,8 +240,8 @@ module.exports = {
         reorderPoint: 3,
         reorderQuantity: 5,
         leadTimeDays: 7,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 5,
@@ -225,8 +252,8 @@ module.exports = {
         reorderPoint: 3,
         reorderQuantity: 5,
         leadTimeDays: 9,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 6,
@@ -237,8 +264,8 @@ module.exports = {
         reorderPoint: 20,
         reorderQuantity: 50,
         leadTimeDays: 3,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 7,
@@ -249,8 +276,8 @@ module.exports = {
         reorderPoint: 20,
         reorderQuantity: 50,
         leadTimeDays: 4,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 8,
@@ -261,8 +288,8 @@ module.exports = {
         reorderPoint: 10,
         reorderQuantity: 50,
         leadTimeDays: 2,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 9,
@@ -273,8 +300,8 @@ module.exports = {
         reorderPoint: 15,
         reorderQuantity: 30,
         leadTimeDays: 4,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 10,
@@ -285,8 +312,8 @@ module.exports = {
         reorderPoint: 30,
         reorderQuantity: 60,
         leadTimeDays: 2,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       },
       {
         id: 11,
@@ -297,8 +324,8 @@ module.exports = {
         reorderPoint: 10,
         reorderQuantity: 20,
         leadTimeDays: 3,
-        created_at: new Date(),
-        updated_at: new Date()
+        created_at: DATE1,
+        updated_at: DATE1
       }
     ])
 
@@ -312,7 +339,7 @@ module.exports = {
         movement_type: 'transfer',
         reference_number: 'TRF-001',
         user_id: 1,
-        created_at: new Date()
+        created_at: DATE2
       },
       {
         product_id: 3,
@@ -322,7 +349,7 @@ module.exports = {
         movement_type: 'transfer',
         reference_number: 'TRF-002',
         user_id: 1,
-        created_at: new Date()
+        created_at: DATE2
       },
       {
         product_id: 1,
@@ -332,7 +359,7 @@ module.exports = {
         movement_type: 'purchase',
         reference_number: 'PO-001',
         user_id: 1,
-        created_at: new Date()
+        created_at: DATE2
       },
       {
         product_id: 2,
@@ -342,7 +369,7 @@ module.exports = {
         movement_type: 'purchase',
         reference_number: 'PO-002',
         user_id: 1,
-        created_at: new Date()
+        created_at: DATE2
       }
     ])
 
@@ -353,7 +380,7 @@ module.exports = {
         location_id: 1,
         quantity: 5,
         date: '2024-01-01',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 2,
@@ -361,7 +388,7 @@ module.exports = {
         location_id: 1,
         quantity: 3,
         date: '2024-01-02',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 3,
@@ -369,7 +396,7 @@ module.exports = {
         location_id: 1,
         quantity: 10,
         date: '2024-01-03',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 4,
@@ -377,7 +404,7 @@ module.exports = {
         location_id: 2,
         quantity: 7,
         date: '2024-01-04',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 5,
@@ -385,7 +412,7 @@ module.exports = {
         location_id: 1,
         quantity: 2,
         date: '2024-01-05',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 6,
@@ -393,7 +420,7 @@ module.exports = {
         location_id: 2,
         quantity: 4,
         date: '2024-01-06',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 7,
@@ -401,7 +428,7 @@ module.exports = {
         location_id: 2,
         quantity: 6,
         date: '2024-01-07',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 8,
@@ -409,7 +436,7 @@ module.exports = {
         location_id: 1,
         quantity: 8,
         date: '2024-01-08',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 9,
@@ -417,7 +444,7 @@ module.exports = {
         location_id: 2,
         quantity: 1,
         date: '2024-01-09',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 10,
@@ -425,7 +452,7 @@ module.exports = {
         location_id: 1,
         quantity: 9,
         date: '2024-01-10',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 11,
@@ -433,7 +460,7 @@ module.exports = {
         location_id: 2,
         quantity: 5,
         date: '2024-01-11',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 12,
@@ -441,7 +468,7 @@ module.exports = {
         location_id: 1,
         quantity: 3,
         date: '2024-01-12',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 13,
@@ -449,7 +476,7 @@ module.exports = {
         location_id: 2,
         quantity: 2,
         date: '2024-01-13',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 14,
@@ -457,7 +484,7 @@ module.exports = {
         location_id: 1,
         quantity: 4,
         date: '2024-01-14',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 15,
@@ -465,7 +492,7 @@ module.exports = {
         location_id: 2,
         quantity: 6,
         date: '2024-01-15',
-        created_at: new Date(),
+        created_at: DATE1,
       },
       {
         id: 16,
@@ -473,7 +500,7 @@ module.exports = {
         location_id: 1,
         quantity: 7,
         date: '2024-01-16',
-        created_at: new Date(),
+        created_at: DATE1,
       }
     ]);
   },
@@ -486,5 +513,6 @@ module.exports = {
     await queryInterface.bulkDelete('locations', null, {})
     await queryInterface.bulkDelete('categories', null, {})
     await queryInterface.bulkDelete('users', null, {})
+    await queryInterface.bulkDelete('companies', null, {})
   }
 }

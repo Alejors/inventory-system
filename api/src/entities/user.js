@@ -1,12 +1,15 @@
 class User {
-    constructor({ id, username, email, password, role, createdAt, updatedAt }) {
+    constructor({ id, username, email, password, role, companyId, createdAt, updatedAt, company = null }) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.companyId = companyId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        
+        this.company = company;
     }
 
     isAdmin() {

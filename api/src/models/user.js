@@ -25,6 +25,14 @@ const UserModel = sequelize.define('User', {
     type: DataTypes.STRING(50),
     allowNull: false
   },
+  companyId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'companies',
+      key: 'id',
+    },
+  },
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
@@ -49,5 +57,12 @@ const UserModel = sequelize.define('User', {
 UserModel.beforeUpdate((user, options) => {
   user.updatedAt = new Date();
 });
+
+UserModel.associate = (models) => {
+  UserModel.belongsTo(models.Company, {
+    foreignKey: 'companyId',
+    as: 'company',
+  });
+};
 
 module.exports = UserModel;

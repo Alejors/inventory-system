@@ -24,6 +24,14 @@ const LocationModel = sequelize.define('Location', {
         type: DataTypes.ENUM('warehouse', 'store', 'supplier'),
         allowNull: false
     },
+    companyId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'companies',
+            key: 'id',
+        },
+    },
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
@@ -50,5 +58,12 @@ const LocationModel = sequelize.define('Location', {
 LocationModel.beforeUpdate((location, options) => {
     location.updatedAt = new Date();
 });
+
+LocationModel.associate = (models) => {
+    LocationModel.belongsTo(models.Company, {
+        foreignKey: 'companyId',
+        as: 'company',
+    });
+};
 
 module.exports = LocationModel;

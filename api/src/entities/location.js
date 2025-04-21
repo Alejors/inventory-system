@@ -1,13 +1,16 @@
 class Location {
-    constructor({ id, name, address, references, type, createdAt, updatedAt, deletedAt }) {
+    constructor({ id, name, address, references, type, companyId, createdAt, updatedAt, deletedAt, company = null }) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.references = references;
         this.type = type;
+        this.companyId = companyId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
+
+        this.company = company;
     }
 
     toJSON() {
