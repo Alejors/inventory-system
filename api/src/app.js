@@ -20,6 +20,7 @@ const CategoryRepository = require('./repositories/categoryRepository');
 const LocationRepository = require('./repositories/locationRepository');
 const ProductRepository = require('./repositories/productRepository');
 const CompanyRepository = require('./repositories/companyRepository');
+const ProductEventRepository = require('./repositories/productEventRepository');
 
 // Import Services
 const AuthService = require('./services/authService');
@@ -54,13 +55,14 @@ const categoryRepository = new CategoryRepository();
 const locationRepository = new LocationRepository();
 const productRepository = new ProductRepository();
 const companyRepository = new CompanyRepository();
+const productEventRepository = new ProductEventRepository();
 
 // Instanciar servicios
 const authService = new AuthService(userRepository);
 const inventoryService = new InventoryService();
 const categoryService = new CategoryService(categoryRepository);
 const locationService = new LocationService(locationRepository, userRepository);
-const productService = new ProductService(productRepository);
+const productService = new ProductService(productRepository, productEventRepository);
 const companyService = new CompanyService(companyRepository, userRepository);
 
 // Instanciar controladores
