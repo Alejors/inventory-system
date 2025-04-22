@@ -24,14 +24,14 @@ class CompanyRepository extends ICompanyRepository {
       where: { id },
       paranoid: !includeDeleted,
     });
-    return company ? new Company(company.toJSON()) : null;
+    return company ? Company.fromObject(company.toJSON()) : null;
   }
 
   async findAll(includeDeleted = false) {
     const companies = await CompanyModel.findAll({
       paranoid: !includeDeleted,
     });
-    return companies.map(company => new Company(company.toJSON()));
+    return companies.map(company => Company.fromObject(company.toJSON()));
   }
 
   async findByFilter(filter, includeDeleted = false) {
@@ -40,14 +40,14 @@ class CompanyRepository extends ICompanyRepository {
       where: processedFilter,
       paranoid: !includeDeleted,
     });
-    return companies.map(company => new Company(company.toJSON()));
+    return companies.map(company => Company.fromObject(company.toJSON()));
   }
 
   async update(id, companyData) {
     const company = await this.findById(id);
     if (company) {
       const updatedCompany = await company.update(companyData);
-      return new Company(updatedCompany.toJSON());
+      return Company.fromObject(updatedCompany.toJSON());
     }
     return null;
   }

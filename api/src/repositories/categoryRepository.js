@@ -1,14 +1,14 @@
 const CategoryModel = require('../models/category');
 const ICategoryRepository = require('../interfaces/ICategoryRepository');
 const ConstraintError = require('../errors/constraintError');
-const CategoryEntity = require('../entities/category');
+const Category = require('../entities/category');
 const { sequelizeProcessFilters } = require('../utils/helpers');
 
 class CategoryRepository extends ICategoryRepository {
     async create(categoryData) {
         try {
             const category = await CategoryModel.create(categoryData);
-            return new CategoryEntity(category.toJSON());
+            return Category.fromObject(category.toJSON());
         } catch (error) {
             if (error.name === 'SequelizeUniqueConstraintError') {
                 throw new ConstraintError('La categoría con este nombre ya existe');
@@ -19,18 +19,18 @@ class CategoryRepository extends ICategoryRepository {
 
     async findById(id, includeDeleted = false) {
         const category = await CategoryModel.findByPk(id, { paranoid: !includeDeleted });
-        return category ? new CategoryEntity(category.toJSON()) : null;
+        return category ? Category.fromObject(category.toJSON()) : null;
     }
 
     async findByFilter(filter, includeDeleted = false) {
         const processedFilter = sequelizeProcessFilters(filter);
         const categories = await CategoryModel.findAll({ where: processedFilter, paranoid: !includeDeleted });
-        return categories.map(cat => new CategoryEntity(cat.toJSON()));
+        return categories.map(cat => Category.fromObject(cat.toJSON()));
     }
 
     async findAll(includeDeleted = false) {
         const categories = await CategoryModel.findAll({ paranoid: !includeDeleted });
-        return categories.map(cat => new CategoryEntity(cat.toJSON()));
+        return categories.map(cat => Category.fromObject(cat.toJSON()));
     }
 
     async update(id, categoryData) {
@@ -40,7 +40,8 @@ class CategoryRepository extends ICategoryRepository {
         }
         try {
             await CategoryModel.update(categoryData, { where: { id } });
-            return new CategoryEntity({ ...existingCategory, ...categoryData });
+            const updatedCategory = this.findById(id);
+            return Category.fromObject(updatedCategory.toJSON());
         } catch (error) {
             if (error.name === 'SequelizeUniqueConstraintError') {
                 throw new ConstraintError('La categoría con este nombre ya existe');
