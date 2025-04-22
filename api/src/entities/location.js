@@ -1,5 +1,5 @@
 class Location {
-    constructor({ id, name, address, references, type, companyId, createdAt, updatedAt, deletedAt, company = null }) {
+    constructor(id, name, address, references, type, companyId, createdAt, updatedAt, deletedAt, company = null) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -11,6 +11,10 @@ class Location {
         this.deletedAt = deletedAt;
 
         this.company = company;
+    }
+
+    static fromObject(obj) {
+        return new Location(obj.id, obj.name, obj.address, obj.references, obj.type, obj.companyId, obj.createdAt, obj.updatedAt, obj.deletedAt, obj.company);
     }
 
     toJSON() {

@@ -8,6 +8,10 @@ class Company {
     this.deletedAt = deletedAt;
   }
 
+  static fromObject(obj) {
+    return new Company(obj.id, obj.name, obj.code, obj.createdAt, obj.updatedAt, obj.deletedAt);
+  }
+
   toJSON() {
     return {
       id: this.id,

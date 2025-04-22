@@ -1,5 +1,5 @@
 class Product {
-    constructor({ id, sku, name, description, categoryId, createdAt, updatedAt, deletedAt, category = null }) {
+    constructor(id, sku, name, description, categoryId, createdAt, updatedAt, deletedAt, category = null) {
         this.id = id;
         this.sku = sku;
         this.name = name;
@@ -11,6 +11,10 @@ class Product {
 
         // Relación con la categoría
         this.category = category;
+    }
+
+    static fromObject(obj) {
+        return new Product(obj.id, obj.sku, obj.name, obj.description, obj.categoryId, obj.createdAt, obj.updatedAt, obj.deletedAt, obj.category);
     }
 
     toJSON() {

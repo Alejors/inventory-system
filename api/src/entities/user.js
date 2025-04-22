@@ -1,5 +1,5 @@
 class User {
-    constructor({ id, username, email, password, role, companyId, createdAt, updatedAt, company = null }) {
+    constructor(id, username, email, password, role, companyId, createdAt, updatedAt, company = null) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -18,6 +18,10 @@ class User {
 
     canManageStorage() {
         return this.role === 'admin' || this.role === 'manager';
+    }
+
+    static fromObject(obj) {
+        return new User(obj.id, obj.username, obj.email, obj.password, obj.role, obj.companyId, obj.createdAt, obj.updatedAt);
     }
 
     toJSON() {
