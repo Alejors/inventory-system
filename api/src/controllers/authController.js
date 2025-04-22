@@ -11,8 +11,8 @@ class AuthController {
 
     async createUser(req, res) {
         try {
-            const data = req.body
-            const userDTO = UserDTO.fromObject(data)
+            const userDTO = UserDTO.fromObject(req.body)
+
             if (userDTO.role === 'admin' && (!req.user || req.user.role !== 'admin')) {
                 return res.status(403).json({
                     success: false,
@@ -23,7 +23,7 @@ class AuthController {
 
             return res.status(201).json({
                 success: true,
-                data: response,
+                data: response.toJSON(),
                 message: "Usuario Creado."
             })
         } catch (error) {
