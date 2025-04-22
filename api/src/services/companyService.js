@@ -1,3 +1,4 @@
+const { AuthError } = require("../errors/authError");
 const { generateCompanyToken } = require("./tokenService");
 
 class CompanyService {
@@ -34,6 +35,11 @@ class CompanyService {
 
   async getToken(companyId, user) {
     const currentUser = await this.userRepository.findById(user.id);
+    
+    if (!currentUser) {
+      throw new AuthError('User not found. Log in again.');
+    }
+
     if (!currentUser.isAdmin() && currentUser.companyId !== companyId) {
         throw new Error('User not associated with company');
     }
