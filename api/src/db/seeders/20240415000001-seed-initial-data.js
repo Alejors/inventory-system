@@ -12,15 +12,15 @@ module.exports = {
         id: 1,
         name: 'Compañía 1',
         code: 'COMP1',
-        createdAt: DATE1,
-        updatedAt: DATE1,
+        created_at: DATE1,
+        updated_at: DATE1,
       },
       {
         id: 2,
         name: 'Compañía 2',
         code: 'COMP2',
-        createdAt: DATE1,
-        updatedAt: DATE1,
+        created_at: DATE1,
+        updated_at: DATE1,
       }
     ])
 
