@@ -22,7 +22,7 @@ class UserRepository extends IUserRepository {
     async findById(id) {
         const userModel = await UserModel.findByPk(id);
         if (!userModel) return null;
-        return new User(userModel.toJSON());
+        return User.fromObject(userModel.toJSON());
     }
 
     async findByFilter(filter) {
