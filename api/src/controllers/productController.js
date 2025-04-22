@@ -7,8 +7,9 @@ class ProductController {
 
     async createProduct(req, res) {
         const productDTO = ProductDTO.fromObject(req.body);
+        const userId = req.user.id;
         try {
-            const product = await this.productService.createProduct(productDTO);
+            const product = await this.productService.createProduct(productDTO, userId);
             res.status(201).json({ success: true, product });
         } catch (error) {
             if (error instanceof ConstraintError) {

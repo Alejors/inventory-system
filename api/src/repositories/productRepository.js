@@ -1,6 +1,7 @@
-const { ProductModel } = require('../models/product');
+const ProductModel = require('../models/product');
 const IProductRepository = require('../interfaces/IProductRepository');
 const Product = require('../entities/product');
+const ConstraintError = require('../errors/constraintError');
 const { sequelizeProcessFilters } = require('../utils/helpers');
 
 
@@ -19,7 +20,7 @@ class ProductRepository extends IProductRepository {
     }
 
     async findById(id, includeDeleted = false) {
-        const product = await ProductModel.findOne({ where: { id, paranoid: !includeDeleted  } });
+        const product = await ProductModel.findOne({ where: { id }, paranoid: !includeDeleted  });
         return product ? Product.fromObject(product.toJSON()) : null;
     }
 
@@ -30,7 +31,7 @@ class ProductRepository extends IProductRepository {
 
     async findByFilter(filter, includeDeleted = false) {
         const processedFilter = sequelizeProcessFilters(filter);
-        const products = await ProductModel.findAll({where: processedFilter, paranoid: !includeDeleted});
+        const products = await ProductModel.findAll({ where: processedFilter, paranoid: !includeDeleted });
         return products.map(product => Product.fromObject(product.toJSON()));
     }
 
@@ -48,6 +49,15 @@ class ProductRepository extends IProductRepository {
 
     async delete(id) {
         return await ProductModel.destroy({ where: { id } });
+    }
+
+    async restore(id) {
+        const product = await ProductModel.findByPk(id, { paranoid: false });
+        if (!product) {
+            throw new Error('Producto no encontrado');
+        }
+        const restoredProduct = await product.restore();
+        return restoredProduct ? Product.fromObject(restoredProduct.toJSON()) : null;
     }
 }
 
