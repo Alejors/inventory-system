@@ -57,6 +57,35 @@ function authMiddleware(req, res, next) {
     }
 }
 
+const validateCompanyToken = (req, res, next) => {
+    const { companyToken } = req.query;
+    if (!companyToken) {
+        // Si no viene token de compañía, no se agrega companyId al request.body
+        return next();
+    }
+
+    try {
+        const decoded = verifyToken(companyToken);
+
+        // Si el token es válido, agrega el companyId al request.body
+        req.body.companyId = decoded.id;
+
+        return next();
+    } catch (error) {
+        if (error instanceof AuthError) {
+            return res.status(401).json({
+                success: false,
+                message: error.message
+            });
+        }
+        res.status(500).json({
+            success: false,
+            message: 'Error de autenticación'
+        });
+    }
+};
+
 module.exports = {
-    authMiddleware
+    authMiddleware,
+    validateCompanyToken
 };
