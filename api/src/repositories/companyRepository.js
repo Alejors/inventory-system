@@ -9,7 +9,7 @@ class CompanyRepository extends ICompanyRepository {
   async create(companyData) {
     try {
       const company = await CompanyModel.create(companyData);
-      return new Company(company.toJSON());
+      return Company.fromObject(company.toJSON());
     } catch (error) {
       if (error.name === 'SequelizeUniqueConstraintError' || error.name === 'SequelizeValidationError') {
         throw new ConstraintError('El código de la empresa ya existe');
