@@ -32,10 +32,16 @@ const ProductModel = sequelize.define('Product', {
   updatedAt: {
     type: DataTypes.DATE,
     field: 'updated_at'
+  },
+  deletedAt: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    field: 'deleted_at'
   }
 }, {
   tableName: 'products',
-  timestamps: true
+  timestamps: true,
+  paranoid: true
 });
 
-module.exports = { ProductModel };
+module.exports = ProductModel;
