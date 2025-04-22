@@ -1,4 +1,5 @@
 const companyDTO = require('../dtos/companyDTO');
+const { AuthError } = require('../errors/authError');
 
 
 class CompanyController {
@@ -83,7 +84,7 @@ class CompanyController {
         const token = await this.companyService.getToken(companyId, user);
         res.status(201).json({ success: true, token });
     } catch (error) {
-        if(error.message === 'User not associated with company') {
+        if(error.message === 'User not associated with company' || error instanceof AuthError) {
             res.status(403).json({ success: false, message: error.message });
         } else {
             res.status(500).json({ success: false, message: error.message });
